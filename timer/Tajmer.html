@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Timer</title>
+</head>
+<body>
+   
+    <style>
+        #naglowek{
+            font-size: xx-large;
+            text-align: center;
+        }
+        td{text-align: center;}
+        table{width: 300px;}
+        img{width: 30px; height: auto;}
+        input{
+            width: 50px;
+            font-size: 40px;
+        }
+        button{
+            font-size: 40px;
+            border: 1px;
+            display: inline-block;
+            margin: 0 auto;
+            background-color: lightgrey;
+        }
+        .center{
+            text-align: center;
+        }
+    </style>
+    
+    <div id="naglowek">TIMER</div>
+    <table cellpadding="2" align="center">
+        <tr>
+            <td>G</td>
+            <td>M</td>
+            <td>S</td>
+        </tr>
+        <tr>
+            <td><img src="plus.png" id="plusG"></td>
+            <td><img src="plus.png" id="plusM"></td>
+            <td><img src="plus.png" id="plusS"></td>
+        </tr>
+        <tr>
+            <td><input id="G" type="text" readonly value="00"></td>
+            <td><input id="M" type="text" readonly value="00"></td>
+            <td><input id="S" type="text" readonly value="00"></td>
+        </tr>
+        <tr>
+            <td><img src="minus.png" id="minusG"></td>
+            <td><img src="minus.png" id="minusM"></td>
+            <td><img src="minus.png" id="minusS"></td>
+        </tr>
+    </table>
+
+    <div class="center">
+        <button id="start">START</button><br><br>
+        <button id="reset">RESET</button>
+    </div>
+
+    <script>
+        var plusG=document.getElementById("plusG");
+        var plusM=document.getElementById("plusM");
+        var plusS=document.getElementById("plusS");
+        var minusG=document.getElementById("minusG");
+        var minusM=document.getElementById("minusM");
+        var minusS=document.getElementById("minusS");
+        var G=document.getElementById("G");
+        var M=document.getElementById("M");
+        var S=document.getElementById("S");
+        var start=document.getElementById("start");
+        var reset=document.getElementById("reset");
+
+        var started = false;
+
+        plusG.onclick = function(){
+            let aktualna = parseInt(G.value);
+            if(started==false&&aktualna<99){
+                let wartosc=aktualna + 1;
+                if(wartosc<10) wartosc="0"+wartosc;
+                G.value=wartosc;
+            }
+        }
+
+        plusM.onclick = function(){
+            let aktualna = parseInt(M.value);
+            if(started==false&&aktualna<59){
+                let wartosc=aktualna + 1;
+                if(wartosc<10) wartosc="0"+wartosc;
+                M.value=wartosc;
+            }
+        }
+        plusS.onclick = function(){
+            let aktualna = parseInt(S.value);
+            if(started==false&&aktualna<59){
+                let wartosc=aktualna + 1;
+                if(wartosc<10) wartosc="0"+wartosc;
+                S.value=wartosc;
+            }
+        }
+        minusG.onclick = function(){
+            let aktualna = parseInt(G.value);
+            if(started==false&&aktualna>0){
+                let wartosc=aktualna - 1;
+                if(wartosc<10) wartosc="0"+wartosc;
+                G.value=wartosc;
+            }
+        }
+        minusM.onclick = function(){
+            let aktualna = parseInt(M.value);
+            if(started==false&&aktualna>0){
+                let wartosc=aktualna - 1;
+                if(wartosc<10) wartosc="0"+wartosc;
+                M.value=wartosc;
+            }
+        }
+        minusS.onclick = function(){
+            let aktualna = parseInt(S.value);
+            if(started==false&&aktualna>0){
+                let wartosc=aktualna - 1;
+                if(wartosc<10) wartosc="0"+wartosc;
+                S.value=wartosc;
+            }
+        }
+
+        reset.onclick=function(){
+            G.value="00";
+            M.value="00";
+            S.value="00";
+        }
+
+        var interval;
+
+        start.onclick = function() {
+            if (!started) {
+                started = true;
+                this.innerHTML = "STOP";
+                this.style.backgroundColor = "red";
+                
+                let sekundy = parseInt(G.value) * 3600 + parseInt(M.value) * 60 + parseInt(S.value);
+                
+                interval = setInterval(function() {
+                    if (sekundy > 0) {
+                        sekundy--;
+                        
+                        let godziny = Math.floor(sekundy / 3600);
+                        let minuty = Math.floor((sekundy % 3600) / 60);
+                        let sekundyPozostale = sekundy % 60;
+                        
+                        G.value = godziny < 10 ? "0" + godziny : godziny;
+                        M.value = minuty < 10 ? "0" + minuty : minuty;
+                        S.value = sekundyPozostale < 10 ? "0" + sekundyPozostale : sekundyPozostale;
+                    } else {
+                        clearInterval(interval);
+                        started = false;
+                        start.innerHTML = "START";
+                        start.style.backgroundColor = "lightgrey";
+                    }
+                }, 1000);
+            } else {
+                clearInterval(interval);
+                started = false;
+                this.innerHTML = "START";
+                this.style.backgroundColor = "lightgrey";
+            }
+        };
+
+    </script>
+</body>
+</html>
